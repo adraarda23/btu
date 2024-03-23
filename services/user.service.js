@@ -35,3 +35,23 @@ exports.login = async (req) => {
     throw new Error(error.message);
   }
 };
+
+exports.changePassword = async (req) => {
+  try {
+    let { password, email, newPassword } = req.body;
+    let _password = md5(password);
+    const newHashedPassword = md5(newPassword);
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email: email, password: _password },
+      { $set: { password: newHashedPassword } },
+      { new: true }
+    );
+    if (!updatedUser) {
+      throw new Error("Şifre veya e-posta hatalı.");
+    }
+    return updatedUser;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}

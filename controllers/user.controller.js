@@ -27,7 +27,6 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const json = await userService.userService.login(req);
-    console.log(Date.now());
     res.status(StatusCodes.OK).json({
       ...baseResponse,
       data: json,
@@ -47,3 +46,26 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+exports.changePassword = async (req,res,next)=>{
+  try{
+    const data = await userService.userService.changePassword(req);
+    res.status(StatusCodes.OK).json({
+      ...baseResponse,
+      data: data,
+      success: true,
+      timestamp: Date.now(),
+      code: StatusCodes.OK,
+    });
+  }catch (error) {
+    let errorCode = error.message === "Şifre veya e-posta hatalı." ? 400 : 500;
+    res.status(errorCode).json({
+      ...baseResponse,
+      success: false,
+      error: true,
+      timestamp: Date.now(),
+      code: errorCode, //duplicate var burada hem .status ile hem code ile gönderiliyor
+      message: error.message,
+    });
+  }
+}

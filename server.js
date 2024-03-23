@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(`${process.env.APP_PREFIX}${routerPrefix.USER}`, router.userRouter);
 
 db.mongooseConnection.connectToMongoDb().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server ${PORT} portunda çalışıyor.`);
+  app.listen(process.env.PORT, () => {
+    console.log(`Server ${process.env.PORT} portunda çalışıyor.`);
   });
 });
